@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "809999722918",
+    "firebase_url": "https://locate-me-7589c.firebaseio.com",
+    "project_id": "locate-me-7589c",
+    "storage_bucket": "locate-me-7589c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809999722918:android:13dd666d721c8363",
+        "android_client_info": {
+          "package_name": "com.khalifa.locateme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "809999722918-rmgb4cth80eti57vhuk0d3bc574m1grj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.khalifa.locateme",
+            "certificate_hash": "5a5259df6e3d143f04ee3adb0cc8bb780ea2a53b"
+          }
+        },
+        {
+          "client_id": "809999722918-o8t2bdfddrrpasqp9po7rnrr5cpfb9kg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgwWGzjVSb_1KJw7EwNrke7LxmWLCULCQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "809999722918-o8t2bdfddrrpasqp9po7rnrr5cpfb9kg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
