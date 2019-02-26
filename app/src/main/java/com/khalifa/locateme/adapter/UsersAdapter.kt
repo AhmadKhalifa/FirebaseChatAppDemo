@@ -1,12 +1,12 @@
-package com.khalifa.chatapp.adapter
+package com.khalifa.locateme.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import com.khalifa.chatapp.R
-import com.khalifa.chatapp.model.User
+import com.khalifa.locateme.R
+import com.khalifa.locateme.model.User
 import kotlinx.android.synthetic.main.list_item_user.view.*
 
 class UsersAdapter(val itemInteractionListener: OnItemInteractionListener?) :

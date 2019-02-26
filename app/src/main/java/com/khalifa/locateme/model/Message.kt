@@ -1,4 +1,4 @@
-package com.khalifa.chatapp.model
+package com.khalifa.locateme.model
 
 data class Message(var sender: String?, var receiver: String?, var message: String?) {
 

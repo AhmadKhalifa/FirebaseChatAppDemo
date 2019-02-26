@@ -1,4 +1,4 @@
-package com.khalifa.chatapp
+package com.khalifa.locateme
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

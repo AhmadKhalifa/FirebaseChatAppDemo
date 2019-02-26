@@ -1,4 +1,4 @@
-package com.khalifa.chatapp
+package com.khalifa.locateme
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.khalifa.chatapp.activity
+package com.khalifa.locateme.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.khalifa.chatapp.R
+import com.khalifa.locateme.R
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
 

@@ -1,4 +1,4 @@
-package com.khalifa.chatapp.adapter
+package com.khalifa.locateme.adapter
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

@@ -1,4 +1,4 @@
-package com.khalifa.chatapp.activity
+package com.khalifa.locateme.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -10,11 +10,11 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.khalifa.chatapp.R
-import com.khalifa.chatapp.adapter.ViewPagerAdapter
-import com.khalifa.chatapp.fragment.ChatsFragment
-import com.khalifa.chatapp.fragment.UsersFragment
-import com.khalifa.chatapp.model.User
+import com.khalifa.locateme.R
+import com.khalifa.locateme.adapter.ViewPagerAdapter
+import com.khalifa.locateme.fragment.ChatsFragment
+import com.khalifa.locateme.fragment.UsersFragment
+import com.khalifa.locateme.model.User
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {

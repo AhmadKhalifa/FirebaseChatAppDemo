@@ -1,4 +1,4 @@
-package com.khalifa.chatapp.fragment
+package com.khalifa.locateme.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,10 +12,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.khalifa.chatapp.R
-import com.khalifa.chatapp.activity.ChatActivity
-import com.khalifa.chatapp.adapter.UsersAdapter
-import com.khalifa.chatapp.model.User
+import com.khalifa.locateme.R
+import com.khalifa.locateme.activity.ChatActivity
+import com.khalifa.locateme.adapter.UsersAdapter
+import com.khalifa.locateme.model.User
 import kotlinx.android.synthetic.main.fragment_users.*
 import java.lang.IllegalStateException
 
