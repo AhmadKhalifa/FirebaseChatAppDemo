@@ -19,9 +19,6 @@ import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
 
-    private var currentUser: FirebaseUser? = null
-    private var databaseReference: DatabaseReference? = null
-
     companion object {
 
         fun startActivity(activity: Activity?) = activity?.run {
@@ -33,6 +30,9 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
     }
+
+    private var currentUser: FirebaseUser? = null
+    private var databaseReference: DatabaseReference? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +55,7 @@ class HomeActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val user = dataSnapshot.getValue(User::class.java)
                 usernameEditText.text = user?.username
-                if ((user?.imageUrl ?: "") == "default") {
+                if ((user?.imageUrl ?: "default") == "default") {
                     profileImageView.setImageResource(R.mipmap.ic_launcher_round)
                 } else {
                     Glide.with(this@HomeActivity).load(user?.imageUrl).into(profileImageView)

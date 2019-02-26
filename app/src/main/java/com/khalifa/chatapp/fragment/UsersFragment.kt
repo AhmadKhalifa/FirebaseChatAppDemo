@@ -13,9 +13,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.khalifa.chatapp.R
+import com.khalifa.chatapp.activity.ChatActivity
 import com.khalifa.chatapp.adapter.UsersAdapter
 import com.khalifa.chatapp.model.User
 import kotlinx.android.synthetic.main.fragment_users.*
+import java.lang.IllegalStateException
 
 class UsersFragment : Fragment(), UsersAdapter.OnItemInteractionListener {
 
@@ -65,7 +67,7 @@ class UsersFragment : Fragment(), UsersAdapter.OnItemInteractionListener {
         })
     }
 
-    override fun onUserClick(user: User) {
-
-    }
+    override fun onUserClick(user: User) = user.id?.run userId@ {
+        ChatActivity.startActivity(activity, this@userId)
+    } ?: throw IllegalStateException("Invalid user")
 }

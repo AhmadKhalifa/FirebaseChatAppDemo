@@ -18,7 +18,7 @@ class UsersAdapter(val itemInteractionListener: OnItemInteractionListener?) :
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, position: Int) =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         UsersViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_user, parent, false))
 
     override fun getItemCount() = users?.size ?: 0
@@ -30,7 +30,7 @@ class UsersAdapter(val itemInteractionListener: OnItemInteractionListener?) :
         fun setContent(usersAdapter: UsersAdapter) = with(view) {
             val user = usersAdapter.users?.get(adapterPosition)
             user?.run user@ {
-                if (imageUrl == null || imageUrl == "default") {
+                if ((imageUrl ?: "default") == "default") {
                     profileImageView.setImageResource(R.mipmap.ic_launcher_round)
                 } else {
                     Glide.with(profileImageView.context).load(imageUrl).into(profileImageView)

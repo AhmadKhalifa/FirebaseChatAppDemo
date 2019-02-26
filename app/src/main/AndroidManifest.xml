@@ -9,19 +9,23 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name="com.khalifa.chatapp.activity.SplashActivity">
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.khalifa.chatapp.activity.RegisterActivity"
-                  android:parentActivityName="com.khalifa.chatapp.activity.SplashActivity"/>
-        <activity android:name="com.khalifa.chatapp.activity.HomeActivity">
+        <activity
+                android:name=".activity.RegisterActivity"
+                android:parentActivityName=".activity.SplashActivity"/>
+        <activity android:name=".activity.HomeActivity">
         </activity>
-        <activity android:name="com.khalifa.chatapp.activity.LoginActivity"
-                  android:parentActivityName="com.khalifa.chatapp.activity.SplashActivity"/>
+        <activity
+                android:name=".activity.LoginActivity"
+                android:parentActivityName=".activity.SplashActivity"/>
+        <activity android:name=".activity.ChatActivity">
+        </activity>
     </application>
 
 </manifest>
