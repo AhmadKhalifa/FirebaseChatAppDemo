@@ -4,17 +4,17 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.text.TextUtils
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.khalifa.locateme.R
 import com.khalifa.locateme.adapter.MessagesAdapter
-import com.khalifa.locateme.model.Message
-import com.khalifa.locateme.model.User
+import com.khalifa.locateme.fragment.TimePickerFragment
+import com.khalifa.locateme.model.*
 import kotlinx.android.synthetic.main.activity_chat.*
 import java.lang.IllegalStateException
 
@@ -33,7 +33,7 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var userId: String
     private lateinit var currentUser: FirebaseUser
-    private var databaseReference: DatabaseReference? = null
+    private lateinit var otherUser: User
 
     private lateinit var messagesAdapter: MessagesAdapter
 
@@ -53,47 +53,84 @@ class ChatActivity : AppCompatActivity() {
         }
         userId = intent.getStringExtra(KEY_USER_ID) ?: throw IllegalStateException("Invalid user id")
         currentUser = FirebaseAuth.getInstance().currentUser!!
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId)
-        databaseReference?.addValueEventListener(object : ValueEventListener {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId)
+        databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
 
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val user = dataSnapshot.getValue(User::class.java)
-                user?.run {
+                user?.run user@ {
+                    otherUser = this@user
                     usernameEditText.text = username
                     if ((imageUrl ?: "default") == "default") {
                         profileImageView.setImageResource(R.mipmap.ic_launcher_round)
                     } else {
                         Glide.with(this@ChatActivity).load(imageUrl).into(profileImageView)
                     }
-                    messagesAdapter = MessagesAdapter(id!!, imageUrl)
+                    if (!::messagesAdapter.isInitialized) {
+                        messagesAdapter = MessagesAdapter(userId, imageUrl)
+                    }
                     messagesRecyclerView.adapter = messagesAdapter
+                    val tracked = isTracked
+                    trackingButton.text = "${ if (tracked) "Stop" else "Start"} tracking"
                     readMessages()
                 }
             }
         })
-        sendImageButton.setOnClickListener { sendMessage() }
+        trackingButton.setOnClickListener {
+            if (otherUser.isTracked) {
+                setTracked(false)
+            } else {
+                setTracked(true)
+            }
+        }
+        changeIntervalButton.setOnClickListener {
+            TimePickerFragment.showFragment(
+                supportFragmentManager,
+                object : TimePickerFragment.OnFragmentInteractionListener {
+                    override fun onTimeSet(hours: Int, minutes: Int) = setInterval(hours, minutes)
+                })
+        }
     }
 
-    private fun sendMessage() {
-        messageEditText.text?.toString()?.let { message ->
-            if (!TextUtils.isEmpty(message)) {
-                val databaseReference = FirebaseDatabase.getInstance().reference
-                databaseReference.child("Chats").push().setValue(hashMapOf(
-                    "sender" to currentUser.uid,
-                    "receiver" to userId,
-                    "message" to message
+    private fun setTracked(tracked: Boolean) {
+        FirebaseDatabase.getInstance().getReference("Users").child(userId).setValue(
+            otherUser.apply { isTracked = tracked }
+        ).addOnCompleteListener { databaseTask ->
+            if (databaseTask.isSuccessful) {
+                sendMessage(Message(
+                    sender = currentUser.uid,
+                    receiver = userId,
+                    message = "Tracking ${ if (tracked) "started" else "stopped"}",
+                    type = if (tracked) TYPE_START_TRACKING else TYPE_STOP_TRACKING
                 ))
-                messageEditText.setText("")
             }
         }
     }
 
+    private fun setInterval(hours: Int, minutes: Int) {
+        FirebaseDatabase.getInstance().getReference("Users").child(userId).setValue(
+            otherUser.apply { isTracked = true }.apply { interval = "$hours:$minutes" }
+        ).addOnCompleteListener { databaseTask ->
+            if (databaseTask.isSuccessful) {
+                sendMessage(Message(
+                    sender = currentUser.uid,
+                    receiver = userId,
+                    message = "Location will be sent every $hours hours and $minutes minutes",
+                    type = TYPE_INTERVAL_UPDATE
+                ))
+            }
+        }
+    }
+
+    private fun sendMessage(message: Message) =
+        FirebaseDatabase.getInstance().reference.child("Chats").push().setValue(message)
+
     private fun readMessages() {
-        databaseReference = FirebaseDatabase.getInstance().getReference("Chats")
-        databaseReference?.addValueEventListener(object : ValueEventListener {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Chats")
+        databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
 
             }
@@ -101,12 +138,15 @@ class ChatActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
                 val messages = ArrayList<Message>()
-                dataSnapshot.children.forEach { it.getValue(Message::class.java)?.let { message ->
-                    if (message.receiver in arrayOf(currentUser.uid, userId) &&
-                            message.sender in arrayOf(currentUser.uid, userId)) {
-                        messages.add(message)
+                dataSnapshot.children.forEach {
+                    it.getValue(Message::class.java)?.let { message ->
+                        if (message.receiver in arrayOf(currentUser.uid, userId) &&
+                            message.sender in arrayOf(currentUser.uid, userId)
+                        ) {
+                            messages.add(message)
+                        }
                     }
-                }}
+                }
                 messagesAdapter.messages = messages
             }
         })

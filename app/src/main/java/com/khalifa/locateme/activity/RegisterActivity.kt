@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.khalifa.locateme.R
+import com.khalifa.locateme.model.User
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
 
@@ -59,16 +60,11 @@ class RegisterActivity : AppCompatActivity() {
                     val firebaseUser = firebaseAuth?.currentUser
                     val userId = firebaseUser?.uid
                     databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId ?: "")
-                    databaseReference?.setValue(
-                        hashMapOf(
-                            "id" to userId,
-                            "username" to username,
-                            "imageUrl" to "default"
-                        )
-                    )?.addOnCompleteListener { databaseTask ->
-                        if (databaseTask.isSuccessful) {
-                            HomeActivity.startActivity(this@RegisterActivity)
-                        }
+                    databaseReference?.setValue(User(userId, username, "default"))
+                        ?.addOnCompleteListener { databaseTask ->
+                            if (databaseTask.isSuccessful) {
+                                HomeActivity.startActivity(this@RegisterActivity)
+                            }
                     }
                 }
             }
