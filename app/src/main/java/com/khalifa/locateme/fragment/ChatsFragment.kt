@@ -13,11 +13,12 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.iid.FirebaseInstanceId
 
 import com.khalifa.locateme.R
 import com.khalifa.locateme.activity.ChatActivity
 import com.khalifa.locateme.adapter.UsersAdapter
-import com.khalifa.locateme.model.Message
+import com.khalifa.locateme.model.CloudMessage
 import com.khalifa.locateme.model.User
 import kotlinx.android.synthetic.main.fragment_users.*
 import java.lang.IllegalStateException
@@ -51,6 +52,15 @@ class ChatsFragment : Fragment(),
             adapter = chatsAdapter
         }
         loadUsersIds()
+        updateToken()
+    }
+
+    private fun updateToken() = FirebaseInstanceId.getInstance().token?.run token@ {
+        FirebaseDatabase
+            .getInstance()
+            .getReference("Tokens")
+            .child(FirebaseAuth.getInstance().currentUser!!.uid)
+            .setValue(this@token)
     }
 
     private fun loadUsersIds() {
@@ -63,7 +73,7 @@ class ChatsFragment : Fragment(),
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val usersIdsSet = HashSet<String?>()
-                dataSnapshot.children.forEach { it.getValue(Message::class.java)?.let { message ->
+                dataSnapshot.children.forEach { it.getValue(CloudMessage::class.java)?.let { message ->
                     if (message.sender == firebaseUser?.uid) {
                         usersIdsSet.add(message.receiver)
                     }

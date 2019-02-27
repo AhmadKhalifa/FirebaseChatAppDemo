@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.khalifa.locateme.R
-import com.khalifa.locateme.model.Message
+import com.khalifa.locateme.model.CloudMessage
 
 private const val MESSAGE_TYPE_LEFT = 0
 private const val MESSAGE_TYPE_RIGHT = 1
@@ -17,7 +17,7 @@ class MessagesAdapter(private val otherUserId: String,
                       private val otherUserProfileUrl: String?)
     : RecyclerView.Adapter<MessagesAdapter.MessagesViewHolder>() {
 
-    var messages: ArrayList<Message>? = null
+    var messages: ArrayList<CloudMessage>? = null
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -50,7 +50,7 @@ class MessagesAdapter(private val otherUserId: String,
         fun setContent(messagesAdapter: MessagesAdapter) = with(view) view@ {
             val message = messagesAdapter.messages?.get(adapterPosition)
             message?.run message@ {
-                this@view.findViewById<TextView>(R.id.messageTextView).text = this@message.message
+                this@view.findViewById<TextView>(R.id.messageTextView).text = this@message.messageBody
                 if (viewType == MESSAGE_TYPE_LEFT) {
                     val profileImageView = this@view.findViewById<ImageView>(R.id.profileImageView)
                     if ((messagesAdapter.otherUserProfileUrl ?: "default") == "default") {
